@@ -1,4 +1,4 @@
-import { AppEnums } from "./enums/App.enum";
+import { AppEnums } from "./enums/App.enums";
 import NeoGrid from "./Grid";
 import { useEffect } from "react";
 
