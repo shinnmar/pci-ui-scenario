@@ -122,6 +122,8 @@ const NeoGrid = (): JSX.Element => {
             sortable: true,
             floatingFilter: true,
           }}
+          enableCellTextSelection={true}
+          cellSelection={true} // this enable to select, copy and past but it works with the Premium version
         />
       </div>
     </>
