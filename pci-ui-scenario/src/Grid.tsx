@@ -16,6 +16,12 @@ const parseNumber = (value: string): number | null => {
   return isNaN(num) ? null : num;
 };
 
+const formatPHA = (value: string): string => {
+  if (value === "Y") return "Yes";
+  if (value === "N") return "No";
+  return "";
+};
+
 const formatData = (data: any[]) =>
   data.map((item) => ({
     ...item,
@@ -26,6 +32,7 @@ const formatData = (data: any[]) =>
     q_au_2: parseNumber(item.q_au_2),
     period_yr: parseNumber(item.period_yr),
     i_deg: parseNumber(item.i_deg),
+    pha: formatPHA(item.pha),
   }));
 
 const columnDefs: ColDef[] = [
@@ -88,6 +95,7 @@ const columnDefs: ColDef[] = [
     field: "pha",
     headerName: "Potentially Hazardous",
     filter: "agTextColumnFilter",
+    valueFormatter: (params) => params.value ?? "",
   },
   {
     field: "orbit_class",
