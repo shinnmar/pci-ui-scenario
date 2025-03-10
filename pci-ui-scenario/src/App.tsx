@@ -1,6 +1,6 @@
 import "./global.css";
 import { AppEnums } from "./enums/App.enums";
-import NeoGrid from "./Grid";
+import NeoGrid from "./components/Grid";
 import { useEffect } from "react";
 
 const App = () => {
