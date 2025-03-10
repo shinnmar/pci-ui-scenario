@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridApi } from "ag-grid-community";
 import rawData from "./near-earth-asteroids.json";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AppEnums } from "./enums/App.enums";
+import "./global.css";
 
 const parseDate = (dateString: string): Date | null => {
   if (!dateString) return null;
@@ -101,17 +103,33 @@ const columnDefs: ColDef[] = [
     field: "orbit_class",
     headerName: "Orbit Class",
     filter: "agTextColumnFilter",
-    enableRowGroup: true,
   },
 ];
 
 const NeoGrid = (): JSX.Element => {
   const formattedData = formatData(rawData);
+  const gridApiRef = useRef<GridApi | null>(null);
+
+  const onGridReady = (params: { api: GridApi }) => {
+    gridApiRef.current = params.api;
+  };
+
+  const clearFiltersAndSorters = () => {
+    if (gridApiRef.current) {
+      gridApiRef.current.setFilterModel(null);
+      gridApiRef.current.applyColumnState({ defaultState: { sort: null } });
+    }
+  };
 
   return (
-    <>
-      <h1>{AppEnums.TITLE_PAGE}</h1>
-      <div className="ag-theme-alpine" style={{ height: 900, width: 1920 }}>
+    <div className="app-container">
+      <div className="title-container">
+        <h1>{AppEnums.TITLE_PAGE}</h1>
+        <button className="btn-filter" onClick={clearFiltersAndSorters}>
+          Clear Filters and Sorters
+        </button>
+      </div>
+      <div className="ag-theme-alpine grid-container">
         <AgGridReact
           rowData={formattedData}
           columnDefs={columnDefs}
@@ -124,9 +142,11 @@ const NeoGrid = (): JSX.Element => {
           }}
           enableCellTextSelection={true}
           cellSelection={true} // this enable to select, copy and past but it works with the Premium version
+          onGridReady={onGridReady}
+          domLayout="autoHeight"
         />
       </div>
-    </>
+    </div>
   );
 };
 
